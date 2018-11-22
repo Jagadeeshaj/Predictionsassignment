@@ -3,10 +3,10 @@ library(rattle)
 library(AppliedPredictiveModeling)
 library(randomForest)
 library(rpart.plot)
+library(ROCR)
 
 jtrain <- read.csv("pml-training.csv")
 jtest <- read.csv("pml-testing.csv")
-
 
 jtrain1 <- read.csv(jtrain, na.strings=c("NA",""), header=TRUE)
 jcoltrain <- colnames(jtrain1)
@@ -14,36 +14,34 @@ jtest1 <- read.csv(jtest, na.strings=c("NA",""), header=TRUE)
 jcoltest <- colnames(jtest1)
 all.equal(jcoltrain[1:length(jcoltrain)-1], jcoltest[1:length(jcoltest)-1])
 
-
 jtrain <- jtrain[,!(names(jtrain) %in% drops)]
 jtrain <- jtrain[,8:length(colnames(jtrain))]
-
 jtest <- jtest[,!(names(jtest) %in% drops)]
 jtest <- jtest[,8:length(colnames(jtest))]
-colnames(jtrain)
 
-nsv <- nearZeroVar(jtrain, saveMetrics=TRUE)
+jnzv <- nearZeroVar(jtrain, saveMetrics=TRUE)
 
-set.seed(666)
-jj_small <- createDataPartition(y=jtest$classe, p=0.25, list=FALSE)
-jsmall1 <- jtest[ids_small,]
-jremainder <- jtest[-ids_small,]
+set.seed(600)
+jdivsmall <- createDataPartition(y=jtest$classe, p=0.25, list=FALSE)
+jsmall1 <- jtest[jdivsmall,]
+jremainder <- jtest[-jdivsmall,]
 
-set.seed(666)
+set.seed(600)
 inTrain <- createDataPartition(y=jsmall1$classe, p=0.6, list=FALSE)
 jsmall_train1 <- jsmall1[inTrain,]
 jsmall_test1 <- jsmall1[-inTrain,]
 
+set.seed(600)
+modFit <- train(jsmall_train1$classe ~ ., data = jsmall_train1, method="rpart")
 
-set.seed(666)
-modFit <- train(jsmall_train1$classe ~ .,  preProcess=c("center", "scale"), trControl=trainControl(method = "cv", number = 4), data = jsmall_train1, method="rpart")
-print(modFit, digits=3)
+set.seed(600)
+modFit <- train(jsmall_train1$classe ~ .,  preProcess=c("center", "scale"), jtrCtrl=trainControl(method = "cv", number = 4), data = jsmall_train1, method="rpart")
 
-predictions <- predict(modFit, newdata=jsmall_test1)
-print(confusionMatrix(predictions, jsmall_test1$classe), digits=4)
+predictions <- predict(modFit, jnwdata=jsmall_test1)
+confusionMatrix(predictions, jsmall_test1$classe), digits=4)
 
-set.seed(666)
-modFit <- train(jsmall_train1$classe ~ ., method="rf", preProcess=c("center", "scale"), trControl=trainControl(method = "cv", number = 4), data=jsmall_train1)
-print(modFit, digits=3)
+set.seed(600)
+modFit <- train(jsmall_train1$classe ~ ., method="rf", preProcess=c("center", "scale"), jtrCtrl=trainControl(method = "cv", number = 4), data=jsmall_train1)
 
-print(predict(modFit, newdata=jtest))
+
+predict(modFit, jnwdata=jtest)
