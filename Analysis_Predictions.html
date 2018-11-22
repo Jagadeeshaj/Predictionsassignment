@@ -1,13 +1,17 @@
-Load the packages and set the seed to start with. Then, import the data and validate training and test data are identical. 
-Since both the sets are identical eliminate columns with values 'NA' and other unwanted columns. 
-remove the near zero variables available. As training set is huge divide it into multiple sub sets precisely 3-4-5 equal sets. 
-Again, each training set needs to be split into training and testing in 60% and 40% proportion. 
-Train on all the 4 sets and then run against all 4 sets and check for the accuracy. 
-Let's try with pre-processing and cross validation. Train all the sets pre-processing, 
-then cross validation and then both also run against the all 4 sets with preprocessing and cross validation. 
-the improvement was minimal, hence decided to train all sets with cross validation, then run against testing set, then against 20 values provided. 
+Load the packages and set the seed to start with. Then, import the data and validate whether training and test set data are identical. 
+If both the sets are identical,then eliminate columns with values 'NA' and other unwanted columns, to have focus very specific and to avoid any accuracy errors.
+
+Also remove near zero variables available. As training set is huge(20000 values against 20) divide it into multiple sub sets precisely 3-4-5 equal division. 
+
+Again, each training set needs to be split into training and testing precisely in 60% and 40% proportion.
+Train on all the 4 training sets and then run against all 4 test sets and check for the accuracy, without any additional features.
+
+Let's run with pre-processing and cross validation. Train all the sets with pre-processing method, then cross validation and then both, to validate the accuracy. 
+Also it has be run against all 4 test sets with preprocessing and cross validation. 
+
+Since the accuracy improvement was minimal,  need to train all sets with cross validation, then run against test set, then against 20 values provided. 
 Repeat the same with cross validation and preprocessing. 
-As the prediction rate increased with addition of preprocessing to cross validation, 
-we need to apply cross validation and pre processing for remaining 3 sets. For ex. train set 2,3,4 , run against respective testing set and 
-run against 20 values of testing data provided. Then apply, random forest method with preprocessing and cross validation.
+
+As the prediction rate increased with addition of preprocessing with cross validation, we need to apply cross validation and pre processing for remaining 3 sets. For ex. train set 2,3,4 , run against respective testing set and 
+run against 20 values of testing data provided.
 
